@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>BK Hospital - Medications</title>
+    <link rel="stylesheet" href="../homePage/homePage.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" />
+  </head>
+  <body>
+    <header class="header">
+      <div class="header-left" onclick="navigate('Home')" style="cursor: pointer;">
+        <img src="../../image/01_logobachkhoasang.png" alt="BK Hospital Logo" class="logo" />
+        <h1>BK Hospital</h1>
+      </div>
+      <div class="header-right">
+        <img
+          src="../../image/211694_bell_icon.png"
+          alt="Notifications"
+          class="notification-bell"
+          title="Notifications"
+          onclick="toggleNotifications()"
+        />
+        <div class="user-info">
+          <img
+            src="../../image/avatar.jpg"
+            alt="User Avatar"
+            class="avatar"
+            title="User Account"
+          />
+          <div class="user-details">
+            <span class="user-name">John Doe</span>
+            <span class="user-role">Admin</span>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <div class="notification-popup" id="notification-popup">
+      <h3>Notifications</h3>
+      <ul id="notification-list">
+        <!-- Notifications will be populated here -->
+      </ul>
+    </div>
+
+    <div class="container">
+      <div class="sidebar">
+        <h2>Navigation</h2>
+        <ul>
+          <li><button onclick="navigate('Doctors')"><i class="fas fa-user-md"></i> Doctors</button></li>
+          <li><button onclick="navigate('Nurses')"><i class="fas fa-user-nurse"></i> Nurses</button></li>
+          <li><button onclick="navigate('Patients')"><i class="fas fa-procedures"></i> Patients</button></li>
+          <li><button onclick="navigate('Treatments')"><i class="fas fa-stethoscope"></i> Treatments</button></li>
+          <li class="active"><button onclick="navigate('Medications')"><i class="fas fa-pills"></i> Medications</button></li>
+          <li><button onclick="navigate('departments')"><i class="fas fa-building"></i> Departments</button></li>
+        </ul>
+        <div class="logout-container">
+          <a href="../login/login.html" class="logout-button"><i class="fas fa-sign-out-alt"></i> Logout</a>
+        </div>
+      </div>
+
+      <div class="main-content">
+        <h1>Medications</h1>
+        <div class="actions">
+          <input type="text" placeholder="Search..." class="search-bar" />
+          <button class="filter-button">
+            <span>Filter by Type</span>
+            <i class="fas fa-filter"></i>
+          </button>
+          <button class="new-medication-button fancy-button">
+            <i class="fas fa-plus"></i> New Medication
+          </button>
+        </div>
+        <div class="medication-table">
+          <table class="fancy-table full-width-table no-wrap-table">
+            <thead>
+              <tr>
+                <th>Name</th>
+                <th>Code</th>
+                <th>Type</th>
+                <th>Manufacturer</th>
+                <th>Expiry Date</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="medication-rows">
+              <!-- Medication rows will be populated here -->
+            </tbody>
+          </table>
+        </div>
+        <div class="pagination">
+          <button class="page-button">Previous</button>
+          <span class="page-info">Page 1 of 10</span>
+          <button class="page-button">Next</button>
+        </div>
+      </div>
+    </div>
+
+    <script src="../medications/medications.js"></script>
+    <script>
+      function navigate(page) {
+        if (page === 'Doctors') {
+          window.location.href = '../doctors/doctors.html';
+        } else if (page === 'Nurses') {
+          window.location.href = '../nurses/nurses.html';
+        } else if (page === 'Treatments') {
+          window.location.href = '../treatments/treatments.html';
+        } else if (page === 'Medications') {
+          window.location.href = '../medications/medications.html';
+        } else if (page === 'Patients') {
+          window.location.href = '../patients/patients.html';
+        } else if (page === 'departments') {
+          window.location.href = '../departments/departments.html';
+        }else if (page === 'Home') {
+          window.location.href = '../homePage/homePage.html';
+        }
+      }
+
+      function toggleNotifications() {
+        const popup = document.getElementById('notification-popup');
+        popup.classList.toggle('show');
+      }
+
+      document.addEventListener('DOMContentLoaded', () => {
+        displayNotifications();
+      });
+
+      function displayNotifications() {
+        const notificationList = document.getElementById('notification-list');
+        const notifications = [
+          'New medication added',
+          'Medication out of stock',
+          'Medication expiry alert',
+          // Add more notifications as needed
+        ];
+
+        notifications.forEach(notification => {
+          const li = document.createElement('li');
+          li.textContent = notification;
+          notificationList.appendChild(li);
+        });
+      }
+    </script>
+  </body>
+</html>

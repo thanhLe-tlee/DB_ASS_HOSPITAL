@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>BK Hospital - Appointments</title>
+    <link rel="stylesheet" href="../homePage/homePage.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" />
+  </head>
+  <body>
+    <header class="header">
+      <div class="header-left" onclick="navigate('Home')" style="cursor: pointer;">
+        <img src="../../image/01_logobachkhoasang.png" alt="BK Hospital Logo" class="logo" /> <!-- Add logo image -->
+        <h1>BK Hospital</h1>
+      </div>
+      <div class="header-right">
+        <img
+          src="../../image/211694_bell_icon.png"
+          alt="Notifications"
+          class="notification-bell"
+          title="Notifications"
+        />
+        <div class="user-info">
+          <img
+            src="../../image/avatar.jpg"
+            alt="User Avatar"
+            class="avatar"
+            title="User Account"
+          />
+          <div class="user-details">
+            <span class="user-name">John Doe</span>
+            <span class="user-role">Admin</span>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <div class="container">
+      <div class="sidebar">
+        <h2>Navigation</h2>
+        <ul>
+          <li><button onclick="navigate('Doctors')"><i class="fas fa-user-md"></i> Doctors</button></li>
+          <li><button onclick="navigate('Nurses')"><i class="fas fa-user-nurse"></i> Nurses</button></li>
+          <li><button onclick="navigate('Patients')"><i class="fas fa-procedures"></i> Patients</button></li>
+          <li><button onclick="navigate('Treatments')"><i class="fas fa-stethoscope"></i> Treatments</button></li>
+          <li><button onclick="navigate('Medications')"><i class="fas fa-pills"></i> Medications</button></li>
+          <li><button onclick="navigate('departments')"><i class="fas fa-building"></i> Departments</button></li>
+        </ul>
+        <div class="logout-container">
+          <a href="../login/login.html" class="logout-button"><i class="fas fa-sign-out-alt"></i> Logout</a>
+        </div>
+      </div>
+
+      <div class="main-content">
+        <h1>Dashboard</h1>
+        <div class="stats-container">
+          <div class="stat-box">
+            <h2>Doctors</h2>
+            <div class="stat-bar">
+              <div id="doctor-bar" class="stat-bar-fill"></div>
+            </div>
+            <p id="doctor-count">0</p>
+          </div>
+          <div class="stat-box">
+            <h2>Nurses</h2>
+            <div class="stat-bar">
+              <div id="nurse-bar" class="stat-bar-fill"></div>
+            </div>
+            <p id="nurse-count">0</p>
+          </div>
+          <div class="stat-box">
+            <h2>Patients</h2>
+            <div class="stat-bar">
+              <div id="patient-bar" class="stat-bar-fill"></div>
+            </div>
+            <p id="patient-count">0</p>
+          </div>
+          <div class="stat-box">
+            <h2>Departments</h2>
+            <div class="stat-bar">
+              <div id="department-bar" class="stat-bar-fill"></div>
+            </div>
+            <p id="department-count">0</p>
+          </div>
+          <div class="stat-box">
+            <h2>Medications</h2>
+            <div class="stat-bar">
+              <div id="medication-bar" class="stat-bar-fill"></div>
+            </div>
+            <p id="medication-count">0</p>
+          </div>
+        </div>
+        
+              <!-- Doctor details will be populated here -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <script src="../homePage/homePage.js"></script>
+    <script>
+      // Display details for Doctors on page load
+      document.addEventListener('DOMContentLoaded', () => {
+        displayDetails('Doctors');
+        fetchStats();
+      });
+
+      function navigate(page) {
+        if (page === 'Home') {
+          window.location.href = '../homePage/homePage.html';
+        } else if (page === 'Doctors') {
+          window.location.href = '../doctors/doctors.html';
+        } else if (page === 'Nurses') {
+          window.location.href = '../nurses/nurses.html';
+        } else if (page === 'Treatments') {
+          window.location.href = '../treatments/treatments.html';
+        } else if (page === 'Medications') {
+          window.location.href = '../medications/medications.html';
+        } else if (page === 'Patients') {
+          window.location.href = '../patients/patients.html';
+        } else if (page === 'departments') {
+          window.location.href = '../departments/departments.html';
+        }
+        // ...existing code...
+      }
+
+      async function fetchStats() {
+        try {
+          const response = await fetch('http://localhost:3000/api/stats'); // Replace with your backend API endpoint
+          const data = await response.json();
+
+          const doctorCount = data.doctorCount;
+          const nurseCount = data.nurseCount;
+          const patientCount = data.patientCount;
+          const departmentCount = data.departmentCount;
+          const medicationCount = data.medicationCount;
+
+          document.getElementById('doctor-count').textContent = doctorCount;
+          document.getElementById('nurse-count').textContent = nurseCount;
+          document.getElementById('patient-count').textContent = patientCount;
+          document.getElementById('department-count').textContent = departmentCount;
+          document.getElementById('medication-count').textContent = medicationCount;
+
+          updateBar('doctor-bar', doctorCount);
+          updateBar('nurse-bar', nurseCount);
+          updateBar('patient-bar', patientCount);
+          updateBar('department-bar', departmentCount);
+          updateBar('medication-bar', medicationCount);
+        } catch (error) {
+          console.error('Error fetching stats:', error);
+        }
+      }
+
+      function updateBar(barId, count) {
+        const maxCount = 2000;
+        const bar = document.getElementById(barId);
+        const percentage = (count / maxCount) * 100;
+        bar.style.width = percentage + '%';
+        bar.style.backgroundColor = percentage > 50 ? '#007bff' : '#ff4d4d';
+      }
+    </script>
+  </body>
+</html>

@@ -1,0 +1,87 @@
+body {
+  font-family: "Montserrat", sans-serif;
+  background-image: url("https://wallpaperaccess.com/full/1282794.jpg"); /* Correct image path */
+  background-size: cover;
+  background-color: #f4f4f9;
+  margin: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  backdrop-filter: blur(5px); /* Add blur effect */
+}
+
+.create-account-container {
+  background: white;
+  padding: 2em;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  max-width: 400px;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 600px;
+}
+
+.create-account-container h1 {
+  text-align: center;
+  margin: 0;
+  color: #333;
+  font-size: 1.5em;
+}
+
+.form-group {
+  margin-bottom: 1.5em;
+  width: 93%;
+}
+
+.form-group label {
+  display: block;
+  font-size: 0.9em;
+  color: #555;
+  margin-bottom: 0.5em;
+}
+
+.form-group input {
+  width: 100%;
+  padding: 0.8em;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 1em;
+}
+
+.form-group input:focus {
+  border-color: #007bff;
+  outline: none;
+}
+
+.create-account-button {
+  display: block;
+  width: 100%;
+  padding: 0.8em;
+  background: #007bff;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  font-size: 1em;
+  cursor: pointer;
+}
+
+.create-account-button:hover {
+  background: #0056b3;
+}
+
+.create-account-container .links {
+  text-align: center;
+  margin-top: 1em;
+}
+
+.create-account-container .links a {
+  color: #007bff;
+  text-decoration: none;
+}
+
+.create-account-container .links a:hover {
+  text-decoration: underline;
+}

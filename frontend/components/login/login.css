@@ -1,0 +1,95 @@
+@import url("https://fonts.googleapis.com/css2?family=Montserrat+Underline:ital,wght@0,100..900;1,100..900&display=swap");
+
+body {
+  font-family: "Montserrat", sans-serif;
+  background-image: url("https://wallpaperaccess.com/full/1282794.jpg");
+  background-size: cover;
+  background-color: #f4f4f9;
+  margin: 0;
+  display: flex;
+  justify-content: center; /* Center horizontally */
+  align-items: center; /* Center vertically */
+  height: 100vh; /* Full viewport height */
+  backdrop-filter: blur(5px); /* Add blur effect */
+}
+
+h1 {
+  color: blue !important;
+}
+
+.login-container {
+  display: flex;
+  background: white;
+  padding: 2em;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  max-width: 400px;
+  width: 100%;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 400px;
+}
+
+.login-container h1 {
+  text-align: center;
+  margin-bottom: 1em;
+  color: #333;
+}
+
+.form-group {
+  margin-bottom: 1.5em;
+  width: 93%;
+  outline: none;
+}
+
+.form-group label {
+  display: block;
+  font-size: 0.9em;
+  color: #555;
+  margin-bottom: 0.5em;
+}
+
+.form-group input {
+  width: 100%;
+  padding: 0.8em;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 1em;
+}
+
+.form-group input:focus {
+  border-color: #007bff;
+  outline: none;
+}
+
+.login-button {
+  display: block;
+  width: 100%;
+  padding: 0.8em;
+  background: #007bff;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  font-size: 1em;
+  cursor: pointer;
+}
+
+.login-button:hover {
+  background: #0056b3;
+}
+
+.login-container .links {
+  margin-top: 1em;
+  text-align: center;
+}
+
+.login-container .links a {
+  color: #007bff;
+  text-decoration: none;
+  display: block;
+  margin-top: 0.5em;
+}
+
+.login-container .links a:hover {
+  text-decoration: underline;
+}
