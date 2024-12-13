@@ -6,6 +6,7 @@
     <title>BK Hospital - Nurses</title>
     <link rel="stylesheet" href="../homePage/homePage.css" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" />
+    <link rel="stylesheet" href="table.css" />
   </head>
   <body>
     <header class="header">
@@ -83,7 +84,7 @@
                 <th>Specialty</th>
                 <th>Address</th>
                 <th>Start Date</th>
-                <th>Actions</th>
+                <th class="scrollbarhead"></th>
               </tr>
             </thead>
             <tbody id="nurse-rows">
@@ -99,7 +100,7 @@
       </div>
     </div>
 
-    <script src="../nurses/nurses.js"></script>
+    <script type="module" src="../nurses/nurses.js"></script>
     <script>
       function navigate(page) {
         if (page === 'Doctors') {

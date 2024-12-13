@@ -1,40 +1,40 @@
-document.addEventListener('DOMContentLoaded', () => {
-  fetchMedications();
-});
-
-async function fetchMedications() {
+async function fetchMedicationTableData() {
   try {
-    const response = await fetch('http://localhost:3000/api/medications'); // Replace with your backend API endpoint
-    const medications = await response.json();
-    const medicationRows = document.getElementById('medication-rows');
-    medicationRows.innerHTML = '';
+      const response = await fetch('http://localhost:100/getmedication-rows', {
+          method: 'GET',
+          headers: {
+              'Content-Type': 'application/json'
+          }
+      });
+      const data = await response.json();
+      console.log("DEBUG", data);
+      populateTable1(data);
+  } catch (error) {
+      console.error('Error fetching doctor table data:', error);
+  }
+};
 
-    medications.forEach(medication => {
+function populateTable1(data) {
+  const tableBody = document.getElementById('medication-rows');
+  //tableBody.innerHTML = ''; // Clear existing content
+
+  data.forEach(item => {
       const row = document.createElement('tr');
       row.innerHTML = `
-        <td>${medication.name}</td>
-        <td>${medication.code}</td>
-        <td>${medication.type}</td>
-        <td>${medication.manufacturer}</td>
-        <td>${medication.expiryDate}</td>
-        <td>
-          <button class="edit-button" onclick="editMedication('${medication.code}')">Edit</button>
-          <button class="delete-button" onclick="deleteMedication('${medication.code}')">Delete</button>
-        </td>
+          <td>${item.m_code}</td>
+          <td>${item.m_name}</td>
+          <td>${item.expiration_date}</td>
+          <td>${item.price}</td>
+          <td>${item.examination_id}</td>
       `;
-      medicationRows.appendChild(row);
-    });
-  } catch (error) {
-    console.error('Error fetching medications:', error);
-  }
-}
-
-function editMedication(code) {
-  // Implement edit functionality
-  alert(`Edit medication with code: ${code}`);
-}
-
-function deleteMedication(code) {
-  // Implement delete functionality
-  alert(`Delete medication with code: ${code}`);
-}
+      tableBody.appendChild(row);
+  });
+};
+// Call the functions to fetch and populate data when the page loads
+document.addEventListener('DOMContentLoaded', () => {
+  //fetchCustomerData();
+  fetchMedicationTableData();
+  //fetchTable2Data();
+  //fetchTable4Data();
+  //fetchCustomerList();
+});

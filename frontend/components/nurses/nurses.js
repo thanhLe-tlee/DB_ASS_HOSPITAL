@@ -1,71 +1,137 @@
-document.addEventListener('DOMContentLoaded', () => {
-  displayNurses();
-});
+//import React, { useState, useEffect } from 'react';
+//import './Nurses.css';
 
-function displayNurses() {
-  const nurseRows = document.getElementById('nurse-rows');
-  // Fetch and display nurse data here
-  // Example data
-  const nurses = [
-    { code: 'N001', fullName: 'Nurse Alice', dob: '1985-03-12', gender: 'Female', phoneNumber: '123-456-7890', specialty: 'Pediatrics', address: '789 Pine St', startDate: '2018-03-12' },
-    { code: 'N002', fullName: 'Nurse Bob', dob: '1978-07-23', gender: 'Male', phoneNumber: '987-654-3210', specialty: 'Emergency', address: '101 Maple St', startDate: '2017-07-23' },
-    // Add more nurse data as needed
-  ];
-
-  nurses.forEach(nurse => {
-    const row = document.createElement('tr');
-    row.innerHTML = `
-      <td>${nurse.code}</td>
-      <td>${nurse.fullName}</td>
-      <td>${nurse.dob}</td>
-      <td>${nurse.gender}</td>
-      <td>${nurse.phoneNumber}</td>
-      <td>${nurse.specialty}</td>
-      <td>${nurse.address}</td>
-      <td>${nurse.startDate}</td>
-      <td>
-        <button class="edit-button" onclick="editNurse('${nurse.code}')">Edit</button>
-        <button class="delete-button" onclick="deleteNurse('${nurse.code}')">Delete</button>
-      </td>
-    `;
-    nurseRows.appendChild(row);
+function Nurses() {
+  const [nurses, setNurses] = useState([]);
+  const [editNurse, setEditNurse] = useState(null);
+  const [newNurse, setNewNurse] = useState({
+    e_code: ''
   });
 
-  // Add styles for buttons
-  const style = document.createElement('style');
-  style.innerHTML = `
-    .edit-button {
-      background-color: #e0f7fa;
-      color: #007bff;
-      border: none;
-      border-radius: 5px;
-      padding: 5px 10px;
-      cursor: pointer;
-    }
-    .edit-button:hover {
-      background-color: #b2ebf2;
-    }
-    .delete-button {
-      background-color: #ffebee;
-      color: #ff4d4d;
-      border: none;
-      border-radius: 5px;
-      padding: 5px 10px;
-      cursor: pointer;
-    }
-    .delete-button:hover {
-      background-color: #ffcdd2;
-    }
-  `;
-  document.head.appendChild(style);
-}
+  useEffect(() => {
+    fetch('/api/nurses')
+      .then(response => response.json())
+      .then(data => setNurses(data))
+      .catch(error => console.error('Error fetching nurses:', error));
+  }, []);
 
-function editNurse(code) {
-  // Implement edit functionality
-  alert(`Edit nurse with code: ${code}`);
-}
+  const handleEditClick = (nurse) => {
+    setEditNurse(nurse);
+  };
 
-function deleteNurse(code) {
-  // Implement delete functionality
-  alert(`Delete nurse with code: ${code}`);
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setEditNurse({ ...editNurse, [name]: value });
+  };
+
+  const handleFormSubmit = (e) => {
+    e.preventDefault();
+    fetch(`/api/nurses/${editNurse.nurse_code}`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(editNurse),
+    })
+      .then(response => response.json())
+      .then(data => {
+        if (data.success) {
+          setNurses(nurses.map(nurse => (nurse.nurse_code === editNurse.nurse_code ? editNurse : nurse)));
+          setEditNurse(null);
+        }
+      })
+      .catch(error => console.error('Error updating nurse:', error));
+  };
+
+  const handleDeleteClick = (nurse_code) => {
+    fetch(`/api/nurses/${nurse_code}`, {
+      method: 'DELETE',
+    })
+      .then(response => response.json())
+      .then(data => {
+        if (data.success) {
+          setNurses(nurses.filter(nurse => nurse.nurse_code !== nurse_code));
+        }
+      })
+      .catch(error => console.error('Error deleting nurse:', error));
+  };
+
+  const handleNewInputChange = (e) => {
+    const { name, value } = e.target;
+    setNewNurse({ ...newNurse, [name]: value });
+  };
+
+  const handleNewFormSubmit = (e) => {
+    e.preventDefault();
+    fetch('/api/nurses', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(newNurse),
+    })
+      .then(response => response.json())
+      .then(data => {
+        if (data.success) {
+          setNurses([...nurses, data.nurse]);
+          setNewNurse({
+            e_code: ''
+          });
+        }
+      })
+      .catch(error => console.error('Error adding nurse:', error));
+  };
+
+  const handleNewNurseClick = () => {
+    setNewNurse({ e_code: '' });
+    document.getElementById('new-nurse-popup').style.display = 'block';
+  };
+
+  const closeNewNursePopup = () => {
+    document.getElementById('new-nurse-popup').style.display = 'none';
+  };
 }
+async function fetchDoctorTableData() {
+  try {
+      const response = await fetch('http://localhost:100/getDoctorRow', {
+          method: 'GET',
+          headers: {
+              'Content-Type': 'application/json'
+          }
+      });
+      const data = await response.json();
+      console.log("DEBUG", data);
+      populateTable1(data);
+  } catch (error) {
+      console.error('Error fetching doctor table data:', error);
+  }
+};
+
+function populateTable1(data) {
+  const tableBody = document.getElementById('nurse-rows');
+  //tableBody.innerHTML = ''; // Clear existing content
+
+  data.forEach(item => {
+      const row = document.createElement('tr');
+      row.innerHTML = `
+          <td>${item.e_code}</td>
+          <td>${item.e_first_name} ${item.e_last_name}</td>
+          <td>${item.e_dob}</td>
+          <td>${item.e_gender}</td>
+          <td>${item.phone_number}</td>
+          <td>${item.name_specialty}</td>
+          <td>${item.e_address}</td>
+          <td>${item.start_date}</td>
+      `;
+      tableBody.appendChild(row);
+  });
+};
+// Call the functions to fetch and populate data when the page loads
+document.addEventListener('DOMContentLoaded', () => {
+  //fetchCustomerData();
+  fetchDoctorTableData();
+  //fetchTable2Data();
+  //fetchTable4Data();
+  //fetchCustomerList();
+});
+//export default Nurses;

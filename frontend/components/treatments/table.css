@@ -1,0 +1,52 @@
+/* General table styling */
+.fancy-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 20px 0;
+  font-size: 18px;
+  text-align: left;
+}
+
+.fancy-table thead tr {
+  background-color: #009879;
+  color: #ffffff;
+  text-align: left;
+  font-weight: bold;
+}
+
+.fancy-table th,
+.fancy-table td {
+  padding: 12px 15px;
+}
+
+.fancy-table tbody tr {
+  border-bottom: 1px solid #dddddd;
+}
+
+.fancy-table tbody tr:nth-of-type(even) {
+  background-color: #f3f3f3;
+}
+
+.fancy-table tbody tr:last-of-type {
+  border-bottom: 2px solid #009879;
+}
+
+/* Scrolling table styling */
+.treatment-table {
+  overflow: auto;
+  display: block;
+  white-space: nowrap;
+  max-height: 400px; /* Adjust the height as needed */
+}
+
+.treatment-table th,
+.treatment-table td {
+  min-width: 150px;
+}
+
+.treatment-table th.scrollbarhead {
+  width: 17px; /* Width of the scrollbar */
+  padding: 0;
+  background: transparent;
+  border: none;
+}

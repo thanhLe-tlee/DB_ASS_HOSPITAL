@@ -1,68 +1,147 @@
-document.addEventListener('DOMContentLoaded', () => {
-  displayTreatments();
-});
+//import React, { useState, useEffect } from 'react';
+//import './Treatments.css';
 
-function displayTreatments() {
-  const treatmentRows = document.getElementById('treatment-rows');
-  // Fetch and display treatment data here
-  // Example data
-  const treatments = [
-    { name: 'Chemotherapy', code: 'T001', type: 'Cancer', doctor: 'Dr. Smith', date: '2023-10-01' },
-    { name: 'Physical Therapy', code: 'T002', type: 'Rehabilitation', doctor: 'Dr. Johnson', date: '2023-10-02' },
-    // Add more treatment data as needed
-  ];
-
-  treatments.forEach(treatment => {
-    const row = document.createElement('tr');
-    row.innerHTML = `
-      <td>${treatment.name}</td>
-      <td>${treatment.code}</td>
-      <td>${treatment.type}</td>
-      <td>${treatment.doctor}</td>
-      <td>${treatment.date}</td>
-      <td>
-        <button class="edit-button" onclick="editTreatment('${treatment.code}')">Edit</button>
-        <button class="delete-button" onclick="deleteTreatment('${treatment.code}')">Delete</button>
-      </td>
-    `;
-    treatmentRows.appendChild(row);
+function Treatments() {
+  const [treatments, setTreatments] = useState([]);
+  const [editTreatment, setEditTreatment] = useState(null);
+  const [newTreatment, setNewTreatment] = useState({
+    result: '',
+    start_date: '',
+    end_date: '',
+    doctor_code: ''
   });
 
-  // Add styles for buttons
-  const style = document.createElement('style');
-  style.innerHTML = `
-    .edit-button {
-      background-color: #e0f7fa;
-      color: #007bff;
-      border: none;
-      border-radius: 5px;
-      padding: 5px 10px;
-      cursor: pointer;
-    }
-    .edit-button:hover {
-      background-color: #b2ebf2;
-    }
-    .delete-button {
-      background-color: #ffebee;
-      color: #ff4d4d;
-      border: none;
-      border-radius: 5px;
-      padding: 5px 10px;
-      cursor: pointer;
-    }
-    .delete-button:hover {
-      background-color: #ffcdd2;
-    }
-  `;
-  document.head.appendChild(style);
+  useEffect(() => {
+    fetch('/api/treatments')
+      .then(response => response.json())
+      .then(data => setTreatments(data))
+      .catch(error => console.error('Error fetching treatments:', error));
+  }, []);
+
+  const handleEditClick = (treatment) => {
+    setEditTreatment(treatment);
+  };
+
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setEditTreatment({ ...editTreatment, [name]: value });
+  };
+
+  const handleFormSubmit = (e) => {
+    e.preventDefault();
+    fetch(`/api/treatments/${editTreatment.treatment_id}`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(editTreatment),
+    })
+      .then(response => response.json())
+      .then(data => {
+        if (data.success) {
+          setTreatments(treatments.map(treat => (treat.treatment_id === editTreatment.treatment_id ? editTreatment : treat)));
+          setEditTreatment(null);
+        }
+      })
+      .catch(error => console.error('Error updating treatment:', error));
+  };
+
+  const handleDeleteClick = (treatment_id) => {
+    fetch(`/api/treatments/${treatment_id}`, {
+      method: 'DELETE',
+    })
+      .then(response => response.json())
+      .then(data => {
+        if (data.success) {
+          setTreatments(treatments.filter(treatment => treatment.treatment_id !== treatment_id));
+        }
+      })
+      .catch(error => console.error('Error deleting treatment:', error));
+  };
+
+  const handleNewInputChange = (e) => {
+    const { name, value } = e.target;
+    setNewTreatment({ ...newTreatment, [name]: value });
+  };
+
+  const handleNewFormSubmit = (e) => {
+    e.preventDefault();
+    fetch('/api/treatments', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(newTreatment),
+    })
+      .then(response => response.json())
+      .then(data => {
+        if (data.success) {
+          setTreatments([...treatments, data.treatment]);
+          setNewTreatment({
+            result: '',
+            start_date: '',
+            end_date: '',
+            doctor_code: ''
+          });
+        }
+      })
+      .catch(error => console.error('Error adding treatment:', error));
+  };
+
+  const handleNewTreatmentClick = () => {
+    setNewTreatment({
+      result: '',
+      start_date: '',
+      end_date: '',
+      doctor_code: ''
+    });
+    document.getElementById('new-treatment-popup').style.display = 'block';
+  };
+
+  const closeNewTreatmentPopup = () => {
+    document.getElementById('new-treatment-popup').style.display = 'none';
+  };
 }
 
-function editTreatment(code) {
-  // Implement edit functionality
-  alert(`Edit treatment with code: ${code}`);
-}
+async function fetchTreatmentTableData() {
+  try {
+      const response = await fetch('http://localhost:100/getTreatmentRow', {
+          method: 'GET',
+          headers: {
+              'Content-Type': 'application/json'
+          }
+      });
+      const data = await response.json();
+      console.log("DEBUG", data);
+      populateTable1(data);
+  } catch (error) {
+      console.error('Error fetching doctor table data:', error);
+  }
+};
 
-function deleteTreatment(code) {
-  // Implement delete functionality
-  alert(`Delete treatment with code: ${code}`);
-}
+function populateTable1(data) {
+  const tableBody = document.getElementById('treatment-rows');
+  //tableBody.innerHTML = ''; // Clear existing content
+
+  data.forEach(item => {
+      const row = document.createElement('tr');
+      row.innerHTML = `
+          <td>${item.treatment_id}</td>
+          <td>${item.result}</td>
+          <td>${item.start_date}</td>
+          <td>${item.end_date}</td>
+          <td>${item.doctor_code}</td>
+      `;
+      tableBody.appendChild(row);
+  });
+};
+// Call the functions to fetch and populate data when the page loads
+document.addEventListener('DOMContentLoaded', () => {
+  //fetchCustomerData();
+  fetchTreatmentTableData();
+  //fetchTable2Data();
+  //fetchTable4Data();
+  //fetchCustomerList();
+});
+
+//export default Treatments;

@@ -6,6 +6,7 @@
     <title>BK Hospital - Doctors</title>
     <link rel="stylesheet" href="../homePage/homePage.css" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" />
+    <link rel="stylesheet" href="table.css" />
   </head>
   <body>
     <header class="header">
@@ -84,7 +85,7 @@
                 <th>Specialty</th>
                 <th>Address</th>
                 <th>Start Date</th>
-                <th>Actions</th>
+                <th class="scrollbarhead"></th>
               </tr>
             </thead>
             <tbody id="doctor-rows">
@@ -100,7 +101,9 @@
       </div>
     </div>
 
-    <script src="../doctors/doctors.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/react@17/umd/react.production.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/react-dom@17/umd/react-dom.production.min.js"></script>
+    <script type="module" src="../doctors/doctors.js"></script>
     <script>
       function navigate(page) {
         if (page === 'Doctors') {

@@ -1,38 +1,38 @@
-document.addEventListener('DOMContentLoaded', () => {
-  fetchDepartments();
-});
-
-async function fetchDepartments() {
+async function fetchDepartmentTableData() {
   try {
-    const response = await fetch('http://localhost:3000/api/departments'); // Replace with your backend API endpoint
-    const departments = await response.json();
-    const departmentRows = document.getElementById('department-rows');
-    departmentRows.innerHTML = '';
+      const response = await fetch('http://localhost:100/getdepartment-rows', {
+          method: 'GET',
+          headers: {
+              'Content-Type': 'application/json'
+          }
+      });
+      const data = await response.json();
+      console.log("DEBUG", data);
+      populateTable1(data);
+  } catch (error) {
+      console.error('Error fetching doctor table data:', error);
+  }
+};
 
-    departments.forEach(department => {
+function populateTable1(data) {
+  const tableBody = document.getElementById('department-rows');
+  //tableBody.innerHTML = ''; // Clear existing content
+
+  data.forEach(item => {
       const row = document.createElement('tr');
       row.innerHTML = `
-        <td>${department.code}</td>
-        <td>${department.title}</td>
-        <td>${department.dean}</td>
-        <td>
-          <button class="edit-button" onclick="editDepartment('${department.code}')">Edit</button>
-          <button class="delete-button" onclick="deleteDepartment('${department.code}')">Delete</button>
-        </td>
-      `;
-      departmentRows.appendChild(row);
-    });
-  } catch (error) {
-    console.error('Error fetching departments:', error);
-  }
-}
-
-function editDepartment(code) {
-  // Implement edit functionality
-  alert(`Edit department with code: ${code}`);
-}
-
-function deleteDepartment(code) {
-  // Implement delete functionality
-  alert(`Delete department with code: ${code}`);
-}
+          <td>${item.dept_code}</td>
+          <td>${item.title}</td>
+          <td>${item.dean_code}</td>
+    `;
+      tableBody.appendChild(row);
+  });
+};
+// Call the functions to fetch and populate data when the page loads
+document.addEventListener('DOMContentLoaded', () => {
+  //fetchCustomerData();
+  fetchDepartmentTableData();
+  //fetchTable2Data();
+  //fetchTable4Data();
+  //fetchCustomerList();
+});
